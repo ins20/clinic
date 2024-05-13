@@ -7,7 +7,6 @@ import api from "../axios";
 
 const Logout = () => {
   const naviage = useNavigate();
-  const queryClient = useQueryClient();
   const logOut = useMutation({
     mutationFn: (values) => api.post("auth/logout", values),
     onSuccess: () => {
@@ -16,7 +15,6 @@ const Logout = () => {
         title: "Выход",
         message: "Вы успешно вышли из системы!",
       });
-      queryClient.removeQueries();
     },
     onError: () => {
       notifications.show({

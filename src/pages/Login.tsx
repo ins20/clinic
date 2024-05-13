@@ -2,13 +2,14 @@ import { Center } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { TextInput, Button, PasswordInput } from "@mantine/core";
 import { LockClosedIcon, PersonIcon } from "@radix-ui/react-icons";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../axios";
 import { useNavigate } from "react-router-dom";
 import { notifications } from "@mantine/notifications";
 
 const Login = () => {
   const naviage = useNavigate();
+  const queryClient = useQueryClient();
   const logIn = useMutation({
     mutationFn: (values: { password: string; username: string }) =>
       api.post("auth/login", values),
@@ -17,6 +18,9 @@ const Login = () => {
       notifications.show({
         title: "Вход",
         message: "Успешная авторизация!",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
       });
     },
     onError: () => {
